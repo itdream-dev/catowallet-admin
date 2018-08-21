@@ -123,7 +123,7 @@
 					</div>
 				</div>
 
-				<p class="text-center mt-md mb-md">Copyright &copy; 2018 <a href="http://arcanacoins.com">Arcanacoins.Com</a> All rights reserved.</p>
+				<p class="text-center mt-md mb-md">Copyright &copy; 2018 <a href="http://catowallet.com">catowallet.com</a> All rights reserved.</p>
 			</div>
 		</section>
 		<!-- end: page -->
