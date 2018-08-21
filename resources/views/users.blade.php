@@ -38,6 +38,7 @@
                         <th>Name</th>
                         <th>Email address</th>
                         <th>Join Date</th>
+                        <th>Has Wallet Server?</th>
                         <th>Coin Balance</th>
                         <th>Actions</th>
                     </tr>
@@ -45,10 +46,11 @@
                     <tbody>
                     @foreach ($users as $user)
                         <tr id="{{$user->id}}">
-                            <td>{{$user->first_name}} {{$user->last_name}}</td>
+                            <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
                             <td>{{$user->created_at}}</td>
-                            <td>1000 CATO</td>
+                            <td>@if ($user->wallet_id) Yes @else No @endif</td>
+                            <td>0 CATO</td>
                             <td class="actions">
                                 <a href="/users/{{$user->id}}" class="on-default edit-row"><i class="fa fa-pencil"></i></a>
                                 <a href="#" class="on-default remove-row" onclick="removeUser({{$user->id}})"><i class="fa fa-trash-o"></i></a>
@@ -76,26 +78,6 @@
           }
         }
 
-        function loginUser(event, id){
-          event.preventDefault();
-          event.stopPropagation();
-
-          $.ajax({
-              url:'/loginuser/' + id,
-              type: 'POST',
-              data: {id:id},
-              async: true,
-              success: function (ret) {
-                  console.log(ret);
-                  location.href = '{{config::get("FRONT_URL")}}/admin/login?id='+id+'&&key=' + ret;
-              },
-              error:  function(ret)
-              {
-                console.log(ret);
-              }
-          });
-
-        }
     </script>
 
 @endsection

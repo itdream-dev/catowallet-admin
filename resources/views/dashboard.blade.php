@@ -20,7 +20,7 @@
 									<div class="summary">
 										<h4 class="title">Sales this month</h4>
 										<div class="info" style="padding-top:5px">
-											<strong id="netsales-str" class="amount">15,000 CATO</strong>
+											<strong id="netsales-str" class="amount">0 CATO</strong>
 										</div>
 									</div>
 								</div>
@@ -41,7 +41,7 @@
 									<div class="summary">
 										<h4 class="title">Total registered members</h4>
 										<div class="info" style="padding-top:5px">
-											<strong class="amount">2,000</strong>
+											<strong class="amount">{{count($users)}}</strong>
 										</div>
 									</div>
 								</div>
@@ -61,27 +61,19 @@
 						<div class="panel-body">
 							<div class="content">
 								<ul class="simple-user-list">
+                  <?php $i = 0; ?>
+                  @foreach ($users as $user)
+                  <?php $i++ ?>
+                  @if ($i < 11)
                   <li>
 										<figure class="image rounded">
 											<img src="assets/images/!sample-user.jpg" alt="Joseph Doe Junior" class="img-circle">
 										</figure>
-										<span class="title">skyclean906@gmail.com</span>
-										<span class="message truncate">2018-04-05 12:00</span>
+										<span class="title">{{$user->email}}</span>
+										<span class="message truncate">{{$user->created_at}}</span>
 									</li>
-                  <li>
-                    <figure class="image rounded">
-                      <img src="assets/images/!sample-user.jpg" alt="Joseph Doe Junior" class="img-circle">
-                    </figure>
-                    <span class="title">skyclean907@gmail.com</span>
-                    <span class="message truncate">2018-04-05 12:00</span>
-                  </li>
-                  <li>
-                    <figure class="image rounded">
-                      <img src="assets/images/!sample-user.jpg" alt="Joseph Doe Junior" class="img-circle">
-                    </figure>
-                    <span class="title">skyclean908@gmail.com</span>
-                    <span class="message truncate">2018-04-05 12:00</span>
-                  </li>
+                  @endif
+                  @endforeach
 								</ul>
 							</div>
 						</div>
@@ -106,7 +98,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
+												<!-- <tr>
 													<td>skyclean</td>
 													<td>2018-04-05 12:00</td>
                           <td>0.1 BTC</td>
@@ -123,7 +115,7 @@
                           <td>2018-04-05 12:00</td>
                           <td>0.1 BTC</td>
                           <td>1000 CATO</td>
-                        </tr>
+                        </tr> -->
 											</tbody>
 										</table>
 									</div>

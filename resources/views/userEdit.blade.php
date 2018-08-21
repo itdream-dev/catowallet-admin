@@ -32,7 +32,7 @@
 							@if($user['id'])
 								<input type="hidden" name="id" value="{{$user->id}}">
 							@endif
-							
+
 							<div class="form-group">
 								<label class="col-md-3 control-label label-left" for="name">Name</label>
 								<div class="col-md-6">
@@ -46,6 +46,19 @@
 									<input type="email" class="form-control" id="email" name="email" required value="{{$user['email']}}" @if($user['email'] != '') readonly @endif>
 								</div>
 							</div>
+
+							<div class="form-group">
+								<label class="col-md-3 control-label label-left" for="wallet_id">Select a wallet</label>
+								<div class="col-md-6">
+									<select class="form-control" name="wallet_id" id="wallet_id">
+										<option value="">Select a wallet</option>
+										@foreach ($wallets as $item)
+											<option value="{{$item->id}}" @if($user['wallet_id']==$item->id) selected @endif>{{$item->title}} (id:{{$item->id}})</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+
 							@if(!$user['id'])
 							<div class="form-group">
 								<label class="col-md-3 control-label label-left" for="password">Password<span class="required">*</span></label>

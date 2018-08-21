@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-
+use App\Wallet;
 class UserController extends Controller
 {
     /**
@@ -36,14 +36,32 @@ class UserController extends Controller
 
     public function newUser()
     {
+        $wallets = Wallet::all();
+        $wallet_empty = [];
+        foreach ($wallets as $wallet){
+          $user = User::where('wallet_id', $wallet->id)->first();
+          if (!isset($user->id)) {
+            array_push($wallet_empty, $wallet);
+          }
+        }
         return view('userEdit', [
-            'user' => array('id'=>null, 'name'=>'', 'email'=>'', 'permission'=>0, 'course'=>null)
+            'wallets' => $wallet_empty,
+            'user' => array('id'=>null, 'name'=>'', 'email'=>'', 'permission'=>0, 'course'=>null, 'wallet_id'=>null)
         ]);
     }
 
     public function editUser(Request $request, $id)
     {
+      $wallets = Wallet::all();
+      $wallet_empty = [];
+      foreach ($wallets as $wallet){
+        $user = User::where('wallet_id', $wallet->id)->first();
+        if (!isset($user->id) || $user->id == $id) {
+          array_push($wallet_empty, $wallet);
+        }
+      }
         return view('userEdit', [
+            'wallets' => $wallet_empty,
             'user' => User::findOrNew($id)
         ]);
     }
@@ -61,6 +79,7 @@ class UserController extends Controller
             }
 
             $user->name = $userName;
+            $user->wallet_id = $request->input('wallet_id');
 
             if ($request->input('isResetPassword'))
             {
@@ -87,6 +106,7 @@ class UserController extends Controller
               'email' => $request->input('email'),
               'password' => bcrypt($request->input('password')),
               'name' => $userName,
+              'wallet_id' => $request->input('wallet_id')
             ]);
           }
           return redirect()->to('users');

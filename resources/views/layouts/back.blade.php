@@ -161,12 +161,16 @@
                 </li>
               </ul>
             </li>
-
             <li>
+              <a href="/wallets">
+                <i class="fa fa-server"></i> <span>Wallets</span>
+              </a>
+            </li>
+            <!-- <li>
               <a href="/#">
                 <i class="fa fa-book"></i> <span>Transactions</span>
               </a>
-            </li>
+            </li> -->
 
             <li class="nav-parent">
               <a>
