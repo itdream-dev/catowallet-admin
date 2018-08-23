@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Wallet;
+use Log;
 class UserController extends Controller
 {
     /**
@@ -28,6 +29,13 @@ class UserController extends Controller
         if($query == null)
           $query = '';
         $users = User::where('email', 'like', '%'.$query.'%')->paginate(50);
+        foreach ($users as $user){
+          $wallet = Wallet::where('user_id', $user->id)->first();
+          $user->has_connection = 'NO';
+          if (isset($wallet->user_id)){
+            $user->has_connection = 'YES';
+          }
+        }
         return view('users', [
           'users' => $users,
           'search' => $query
@@ -39,14 +47,15 @@ class UserController extends Controller
         $wallets = Wallet::all();
         $wallet_empty = [];
         foreach ($wallets as $wallet){
-          $user = User::where('wallet_id', $wallet->id)->first();
-          if (!isset($user->id)) {
+          if ($wallet->user_id == NULL) {
             array_push($wallet_empty, $wallet);
           }
         }
+
         return view('userEdit', [
             'wallets' => $wallet_empty,
-            'user' => array('id'=>null, 'name'=>'', 'email'=>'', 'permission'=>0, 'course'=>null, 'wallet_id'=>null)
+            'owned_wallets' => [],
+            'user' => array('id'=>null, 'name'=>'', 'email'=>'', 'permission'=>0, 'password'=>'')
         ]);
     }
 
@@ -54,15 +63,20 @@ class UserController extends Controller
     {
       $wallets = Wallet::all();
       $wallet_empty = [];
+      $owned_wallets = [];
+      $user = User::findOrNew($id);
       foreach ($wallets as $wallet){
-        $user = User::where('wallet_id', $wallet->id)->first();
-        if (!isset($user->id) || $user->id == $id) {
+        if ($wallet->user_id == NULL) {
           array_push($wallet_empty, $wallet);
+        } else if ($wallet->user_id == $user->id) {
+          array_push($wallet_empty, $wallet);
+          array_push($owned_wallets, $wallet);
         }
       }
         return view('userEdit', [
             'wallets' => $wallet_empty,
-            'user' => User::findOrNew($id)
+            'owned_wallets' => $owned_wallets,
+            'user' => $user
         ]);
     }
 
@@ -79,7 +93,20 @@ class UserController extends Controller
             }
 
             $user->name = $userName;
-            $user->wallet_id = $request->input('wallet_id');
+            $wallets = $request->input('wallets');
+
+            $wallet_all = Wallet::where('user_id', $user->id)->get();
+            foreach ($wallet_all as $item){
+              $item->user_id = null;
+              $item->save();
+            }
+
+            Log::info($wallets);
+            foreach ($wallets as $item){
+              $wallet = Wallet::where('id', $item)->first();
+              $wallet->user_id = $user->id;
+              $wallet->save();
+            }
 
             if ($request->input('isResetPassword'))
             {
@@ -108,6 +135,18 @@ class UserController extends Controller
               'name' => $userName,
               'wallet_id' => $request->input('wallet_id')
             ]);
+
+            $wallet_all = Wallet::where('user_id', $user->id)->get();
+            foreach ($wallet_all as $item){
+              $item->user_id = null;
+              $item->save();
+            }
+            $wallets = $request->input('wallets');
+            foreach ($wallets as $item){
+              $wallet = Wallet::where('id', $item)->first();
+              $wallet->user_id = $user->id;
+              $wallet->save();
+            }
           }
           return redirect()->to('users');
     }

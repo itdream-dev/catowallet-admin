@@ -49,7 +49,7 @@
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
                             <td>{{$user->created_at}}</td>
-                            <td>@if ($user->wallet_id) Yes @else No @endif</td>
+                            <td>{{$user->has_connection}}</td>
                             <td>0 CATO</td>
                             <td class="actions">
                                 <a href="/users/{{$user->id}}" class="on-default edit-row"><i class="fa fa-pencil"></i></a>

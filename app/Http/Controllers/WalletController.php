@@ -29,7 +29,7 @@ class WalletController extends Controller
           $query = '';
         $wallets = Wallet::where('title', 'like', '%'.$query.'%')->paginate(50);
         foreach ($wallets as $wallet){
-          $user = User::where('wallet_id', $wallet->id)->first();
+          $user = User::where('id', $wallet->user_id)->first();
           $wallet->user_name = "No Owner";
           if (isset($user->name)) $wallet->user_name = $user->name;
         }

@@ -10,6 +10,16 @@
 
 @extends('layouts.back')
 @section('content')
+@php
+	function isSelectedItem($items, $id) {
+		foreach ($items as $item) {
+			if($item->id == $id)
+				return true;
+		}
+
+		return false;
+	}
+@endphp
 	<section role="main" class="content-body">
 		<header class="page-header">
 			<h2>
@@ -47,13 +57,24 @@
 								</div>
 							</div>
 
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="col-md-3 control-label label-left" for="wallet_id">Select a wallet</label>
 								<div class="col-md-6">
 									<select class="form-control" name="wallet_id" id="wallet_id">
 										<option value="">Select a wallet</option>
 										@foreach ($wallets as $item)
 											<option value="{{$item->id}}" @if($user['wallet_id']==$item->id) selected @endif>{{$item->title}} (id:{{$item->id}})</option>
+										@endforeach
+									</select>
+								</div>
+							</div> -->
+
+							<div class="form-group">
+								<label class="col-md-3 control-label label-left" for="levels">Select wallets</label>
+								<div class="col-md-6">
+									<select multiple data-plugin-selectTwo class="form-control populate" name="wallets[]" id="wallets" data-plugin-options='{ "placeholder": "Select wallets", "allowClear": true }'>
+										@foreach ($wallets as $item)
+											<option value="{{$item->id}}" @if($user['id'] && isSelectedItem($owned_wallets, $item->id)) selected @endif>{{$item->title}}</option>
 										@endforeach
 									</select>
 								</div>

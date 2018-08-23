@@ -14,7 +14,7 @@ class Wallet extends Model
      * @var array
      */
     protected $fillable = [
-      'title', 'ip', 'username', 'password', 'rpcuser', 'rpcpassword', 'rpcport', 'is_masternode', 'balance'
+      'title', 'ip', 'username', 'password', 'rpcuser', 'rpcpassword', 'rpcport', 'is_masternode', 'balance', 'user_id'
     ];
 
 }
