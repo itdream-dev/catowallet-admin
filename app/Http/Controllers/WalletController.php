@@ -22,6 +22,27 @@ class WalletController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function my_simple_crypt( $string, $action = 'e' ) {
+      // you may change these values to your own
+      $secret_key = 'my_simple_secret_key';
+      $secret_iv = 'my_simple_secret_iv';
+
+      $output = false;
+      $encrypt_method = "AES-256-CBC";
+      $key = hash( 'sha256', $secret_key );
+      $iv = substr( hash( 'sha256', $secret_iv ), 0, 16 );
+
+      if( $action == 'e' ) {
+          $output = base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
+      }
+      else if( $action == 'd' ){
+          $output = openssl_decrypt( base64_decode( $string ), $encrypt_method, $key, 0, $iv );
+      }
+
+      return $output;
+    }
+
     public function wallets(Request $request)
     {
         $query = $request->input('query');
@@ -31,6 +52,7 @@ class WalletController extends Controller
         foreach ($wallets as $wallet){
           $user = User::where('id', $wallet->user_id)->first();
           $wallet->user_name = "No Owner";
+          $wallet->rpcpassword = $this->my_simple_crypt($wallet->rpcpassword, 'd');
           if (isset($user->name)) $wallet->user_name = $user->name;
         }
         return view('wallets', [
@@ -48,8 +70,10 @@ class WalletController extends Controller
 
     public function editWallet(Request $request, $id)
     {
+        $wallet = Wallet::findOrNew($id);
+        $wallet->rpcpassword = $this->my_simple_crypt($wallet->rpcpassword, 'd');
         return view('walletEdit', [
-            'wallet' => Wallet::findOrNew($id)
+            'wallet' => $wallet
         ]);
     }
 
@@ -61,7 +85,7 @@ class WalletController extends Controller
             $wallet->title = $request->input('title');
             $wallet->rpcuser = $request->input('rpcuser');
             $wallet->ip = $request->input('ip');
-            $wallet->rpcpassword = $request->input('rpcpassword');
+            $wallet->rpcpassword = $this->my_simple_crypt($request->input('rpcpassword'));
             $wallet->rpcport = $request->input('rpcport');
             $wallet->is_masternode = $request->input('is_masternode');
             $wallet->save();
@@ -70,11 +94,12 @@ class WalletController extends Controller
             if(sizeof($exists) > 0) {
               return Redirect::back()->withErrors("This title already used.");
             }
+            $rpcpassword = $this->my_simple_crypt($request->input('rpcpassword'));
             $wallet = Wallet::create([
               'title' => $request->input('title'),
               'ip' => $request->input('ip'),
               'rpcuser' => $request->input('rpcuser'),
-              'rpcpassword' => $request->input('rpcpassword'),
+              'rpcpassword' => $rpcpassword,
               'rpcport' => $request->input('rpcport'),
               'is_masternode' => $request->input('is_masternode'),
             ]);
