@@ -188,7 +188,14 @@
 				rpcuser: rpcuser
 			};
 			$('#test_button').attr('disabled', true);
-			$.post('/testconnection', data, function(res, status){
+			$.post('some.php', {name: 'John'})
+    .done(function(msg){  })
+    .fail(function(xhr, status, error) {
+        // error handling
+    });
+
+			$.post('/testconnection', data)
+			.done(function(res, status){
 				$('#test_button').attr('disabled', false);
 				console.log('status', status);
 				console.log('result', res);
@@ -198,6 +205,12 @@
 					alert('Connecting is failed!\n' + res);
 				}
 			})
+			.faile(function(xhr, status, error) {
+	        // error handling
+					console.log('status:', status)
+					console.log('error:', error)
+					$('#test_button').attr('disabled', false);
+	    });
 		}
 	</script>
 @endsection
