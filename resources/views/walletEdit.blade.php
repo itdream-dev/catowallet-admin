@@ -209,7 +209,7 @@
 	        // error handling
 					console.log('status:', status);
 					console.log('error:', error);
-					alert('Connecting is failed!\n' + 'please check the server is running!');
+					alert('Connecting is failed! (timeout)\n' + 'please check the server is running!');
 					$('#test_button').attr('disabled', false);
 	    });
 		}
