@@ -20,11 +20,18 @@
 			<div class="col-lg-12">
 				<section class="panel">
 					<header class="panel-heading">
+						<div class="row">
+						<div class="col-sm-6 col-lg-6">
 						@if($wallet['id'])
 							<h2 class="panel-title">Edit wallet</h2>
 						@else
 							<h2 class="panel-title">Add new wallet</h2>
 						@endif
+						</div>
+						<div class="col-sm-6 col-lg-6" style="text-align:right">
+							<button class="btn btn-primary" onclick="test()">Test Connection</button>
+						</div>
+						</div>
 					</header>
 					<div class="panel-body">
 						@include('common.errors')
@@ -154,6 +161,27 @@
 				document.getElementById('is_masternode').value = 0;
 			}
 
+		}
+
+		function test(){
+			ip = $('#ip').val();
+			rpcuser = $('#rpcuser').val();
+			rpcpassword = $('#rpcpassword').val();
+			rpcport = $('#rpcport').val();
+			var data = {
+				ip: ip,
+				rpcpassword: rpcpassword,
+				rpcport: rpcport,
+				rpcuser: rpcuser
+			};
+			$.post('/testconnection', data, function(res, status){
+				console.log('result', res);
+				if (res.walletversion > 1){
+					alert('Connecting is successed!');
+				} else {
+					alert('Connecting is failed!\n' + res);
+				}
+			})
 		}
 	</script>
 @endsection

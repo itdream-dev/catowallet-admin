@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Wallet;
+use App\Http\Controllers\Rpc\jsonRPCClient;
 class WalletController extends Controller
 {
     /**
@@ -107,7 +108,14 @@ class WalletController extends Controller
           return redirect()->to('wallets');
     }
 
-
+    public function testconnection(Request $request){
+      $rpcuser = $request->input('rpcuser');
+      $ip = $request->input('ip');
+      $password = $request->input('rpcpassword');
+      $rpcport = $request->input('rpcport');
+      $client = new jsonRPCClient('http://'.$rpcuser.':'.$password.'@'.$ip.':'.$rpcport.'/');
+      return $client->getwalletinfo();
+    }
 
     public function destroy($id)
     {

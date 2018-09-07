@@ -34,3 +34,5 @@ Route::get('/wallets/new', ['as' => 'admin.wallet.new', 'uses' => 'WalletControl
 Route::get('/wallets/{id}', ['as' => 'admin.walletEdit', 'uses' => 'WalletController@editWallet']);
 Route::delete('/wallets/{id}', ['uses' => 'WalletController@destroy']);
 Route::post('/wallet', ['as' => 'admin.wallet', 'uses' => 'WalletController@postEdit']);
+
+Route::post('/testconnection', ['as' => 'admin.testconnection', 'uses' => 'WalletController@testconnection']);
