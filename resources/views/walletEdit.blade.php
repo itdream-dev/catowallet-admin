@@ -205,7 +205,7 @@
 					alert('Connecting is failed!\n' + res);
 				}
 			})
-			.faile(function(xhr, status, error) {
+			.fail(function(xhr, status, error) {
 	        // error handling
 					console.log('status:', status)
 					console.log('error:', error)
