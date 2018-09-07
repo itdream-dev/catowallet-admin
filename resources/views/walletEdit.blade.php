@@ -207,8 +207,9 @@
 			})
 			.fail(function(xhr, status, error) {
 	        // error handling
-					console.log('status:', status)
-					console.log('error:', error)
+					console.log('status:', status);
+					console.log('error:', error);
+					alert('Connecting is failed!\n' + 'please check the server is running!');
 					$('#test_button').attr('disabled', false);
 	    });
 		}
