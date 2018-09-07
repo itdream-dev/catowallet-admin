@@ -29,7 +29,7 @@
 						@endif
 						</div>
 						<div class="col-sm-6 col-lg-6" style="text-align:right">
-							<button class="btn btn-primary" onclick="test()">Test Connection</button>
+							<button id="test_button" class="btn btn-primary" onclick="test()">Test Connection</button>
 						</div>
 						</div>
 					</header>
@@ -187,7 +187,9 @@
 				rpcport: rpcport,
 				rpcuser: rpcuser
 			};
+			$('#test_button').attr('disabled', true);
 			$.post('/testconnection', data, function(res, status){
+				$('#test_button').attr('disabled', false);
 				console.log('status', status);
 				console.log('result', res);
 				if (res.walletversion > 1){
