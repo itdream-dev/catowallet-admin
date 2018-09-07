@@ -168,6 +168,19 @@
 			rpcuser = $('#rpcuser').val();
 			rpcpassword = $('#rpcpassword').val();
 			rpcport = $('#rpcport').val();
+			if (rpcuser == '') {
+				alert('please input rpcuser field!');
+				return;
+			} else if (rpcpassword == ''){
+				alert('please input rpcpassword field!');
+				return;
+			} else if (rpcport == ''){
+				alert('please input rpcport field!');
+				return;
+			} else if (ip == ''){
+				alert('please input ip field!');
+				return;
+			}
 			var data = {
 				ip: ip,
 				rpcpassword: rpcpassword,
@@ -175,6 +188,7 @@
 				rpcuser: rpcuser
 			};
 			$.post('/testconnection', data, function(res, status){
+				console.log('status', status);
 				console.log('result', res);
 				if (res.walletversion > 1){
 					alert('Connecting is successed!');
