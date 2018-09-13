@@ -102,12 +102,13 @@ class UserController extends Controller
             }
 
             Log::info($wallets);
+            if ($wallets){
             foreach ($wallets as $item){
               $wallet = Wallet::where('id', $item)->first();
               $wallet->user_id = $user->id;
               $wallet->save();
             }
-
+            }
             if ($request->input('isResetPassword'))
             {
               Log::info($request->input('reset_password'));
